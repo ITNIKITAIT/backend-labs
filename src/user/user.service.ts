@@ -15,7 +15,7 @@ export class UserService {
     return this.users.find((user) => user.id === id);
   }
 
-  createUser(createUserDto: CreateUserDto) {
+  createUser(createUserDto: CreateUserDto): User {
     const user = this.users.find((user) => user.name === createUserDto.name);
     if (user) {
       throw new ConflictException(
@@ -30,7 +30,7 @@ export class UserService {
     return createdUser;
   }
 
-  getUser(id: string) {
+  getUser(id: string): User {
     const user = this.findUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -38,16 +38,16 @@ export class UserService {
     return user;
   }
 
-  getUsers() {
+  getUsers(): User[] {
     return this.users;
   }
 
-  deleteUser(id: string) {
+  deleteUser(id: string): { message: string } {
     const user = this.findUserById(id);
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
     }
     this.users.splice(this.users.indexOf(user), 1);
-    return `User with id ${id} deleted`;
+    return { message: `User with id ${id} deleted` };
   }
 }

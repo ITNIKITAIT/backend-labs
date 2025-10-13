@@ -15,7 +15,7 @@ export class CategoryService {
     return this.categories.find((c) => c.id === id);
   }
 
-  createCategory(createCategoryDto: CreateCategoryDto) {
+  createCategory(createCategoryDto: CreateCategoryDto): Category {
     const category = this.categories.find(
       (c) => c.name === createCategoryDto.name,
     );
@@ -32,7 +32,7 @@ export class CategoryService {
     return createdCategory;
   }
 
-  getCategory(id: string) {
+  getCategory(id: string): Category {
     const category = this.findCategoryById(id);
     if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
@@ -40,12 +40,12 @@ export class CategoryService {
     return category;
   }
 
-  deleteCategory(id: string) {
+  deleteCategory(id: string): { message: string } {
     const category = this.findCategoryById(id);
     if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
     }
     this.categories.splice(this.categories.indexOf(category), 1);
-    return `Category with id ${id} deleted`;
+    return { message: `Category with id ${id} deleted` };
   }
 }
