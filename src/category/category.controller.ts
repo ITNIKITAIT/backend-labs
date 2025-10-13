@@ -8,16 +8,16 @@ export class CategoryController {
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto) {
-    return this.categoryService.create(createCategoryDto);
+    return this.categoryService.createCategory(createCategoryDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoryService.findOne(id);
+  @Get(':category_id')
+  findOne(@Param('category_id') category_id: string) {
+    return this.categoryService.getCategory(category_id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(id);
+  @Delete(':category_id')
+  remove(@Param('category_id') category_id: string) {
+    return this.categoryService.deleteCategory(category_id);
   }
 }

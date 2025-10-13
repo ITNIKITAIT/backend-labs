@@ -8,17 +8,17 @@ export class UserController {
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.userService.createUser(createUserDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(id);
+  @Get(':user_id')
+  findOne(@Param('user_id') user_id: string) {
+    return this.userService.getUser(user_id);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(id);
+  @Delete(':user_id')
+  remove(@Param('user_id') user_id: string) {
+    return this.userService.deleteUser(user_id);
   }
 }
 
@@ -27,6 +27,6 @@ export class UsersController {
   constructor(private readonly userService: UserService) {}
   @Get()
   findAll() {
-    return this.userService.findAll();
+    return this.userService.getUsers();
   }
 }

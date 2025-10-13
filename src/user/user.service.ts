@@ -1,4 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
 import { randomUUID } from 'node:crypto';
@@ -11,10 +15,12 @@ export class UserService {
     return this.users.find((user) => user.id === id);
   }
 
-  create(createUserDto: CreateUserDto) {
+  createUser(createUserDto: CreateUserDto) {
     const user = this.users.find((user) => user.name === createUserDto.name);
     if (user) {
-      return Error(`User with name ${createUserDto.name} already exists`);
+      throw new ConflictException(
+        `User with name ${createUserDto.name} already exists`,
+      );
     }
     const createdUser = {
       id: randomUUID(),
@@ -24,22 +30,22 @@ export class UserService {
     return createdUser;
   }
 
-  findOne(id: string) {
+  getUser(id: string) {
     const user = this.findUserById(id);
     if (!user) {
-      return new Error(`User with id ${id} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     return user;
   }
 
-  findAll() {
+  getUsers() {
     return this.users;
   }
 
-  remove(id: string) {
+  deleteUser(id: string) {
     const user = this.findUserById(id);
     if (!user) {
-      return new Error(`User with id ${id} not found`);
+      throw new NotFoundException(`User with id ${id} not found`);
     }
     this.users.splice(this.users.indexOf(user), 1);
     return `User with id ${id} deleted`;
