@@ -7,7 +7,7 @@ import { randomUUID } from 'node:crypto';
 export class UserService {
   private readonly users: User[] = [];
 
-  private findUserById(id: string): User | undefined {
+  public findUserById(id: string): User | undefined {
     return this.users.find((user) => user.id === id);
   }
 

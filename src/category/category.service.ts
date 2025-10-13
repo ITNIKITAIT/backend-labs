@@ -7,7 +7,7 @@ import { Category } from './entities/category.entity';
 export class CategoryService {
   private readonly categories: Category[] = [];
 
-  private findCategoryById(id: string): Category | undefined {
+  public findCategoryById(id: string): Category | undefined {
     return this.categories.find((c) => c.id === id);
   }
 
