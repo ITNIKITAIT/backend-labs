@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+  // ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,14 +16,14 @@ export class CategoryService {
   }
 
   createCategory(createCategoryDto: CreateCategoryDto): Category {
-    const category = this.categories.find(
-      (c) => c.name === createCategoryDto.name,
-    );
-    if (category) {
-      throw new ConflictException(
-        `Category with name ${createCategoryDto.name} already exists`,
-      );
-    }
+    // const category = this.categories.find(
+    //   (c) => c.name === createCategoryDto.name,
+    // );
+    // if (category) {
+    //   throw new ConflictException(
+    //     `Category with name ${createCategoryDto.name} already exists`,
+    //   );
+    // }
     const createdCategory = {
       id: randomUUID(),
       ...createCategoryDto,

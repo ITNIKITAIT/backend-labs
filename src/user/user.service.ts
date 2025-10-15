@@ -1,5 +1,5 @@
 import {
-  ConflictException,
+  // ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -16,12 +16,12 @@ export class UserService {
   }
 
   createUser(createUserDto: CreateUserDto): User {
-    const user = this.users.find((user) => user.name === createUserDto.name);
-    if (user) {
-      throw new ConflictException(
-        `User with name ${createUserDto.name} already exists`,
-      );
-    }
+    // const user = this.users.find((user) => user.name === createUserDto.name);
+    // if (user) {
+    //   throw new ConflictException(
+    //     `User with name ${createUserDto.name} already exists`,
+    //   );
+    // }
     const createdUser = {
       id: randomUUID(),
       ...createUserDto,
