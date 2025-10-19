@@ -1,8 +1,34 @@
 # Backend Labs — NestJS
 
-Simple NestJS backend with a `/healthcheck` endpoint. Includes Docker and docker-compose for local development and deployment.
+Develop and test a basic REST API for an expense tracking web application. In this lab, all data is stored **in memory** — no database is used.
 
 ---
+
+### User
+
+| Method | Endpoint         | Description            |
+| ------ | ---------------- | ---------------------- |
+| GET    | `/user/:user_id` | Get a specific user    |
+| DELETE | `/user/:user_id` | Delete a specific user |
+| POST   | `/user`          | Create a new user      |
+| GET    | `/users`         | Get all users          |
+
+### Category
+
+| Method | Endpoint    | Description           |
+| ------ | ----------- | --------------------- |
+| GET    | `/category` | Get all categories    |
+| POST   | `/category` | Create a new category |
+| DELETE | `/category` | Delete a category     |
+
+### Record
+
+| Method | Endpoint             | Description                                               |
+| ------ | -------------------- | --------------------------------------------------------- |
+| GET    | `/record/:record_id` | Get a specific record                                     |
+| DELETE | `/record/:record_id` | Delete a record                                           |
+| POST   | `/record`            | Create a new record                                       |
+| GET    | `/record`            | Get records filtered by `user_id`, `category_id`, or both |
 
 ## Prerequisites
 
@@ -48,4 +74,4 @@ docker-compose down
 
 ## Deployment
 
-[Backend Labs on Render](https://backend-labs-fnwj.onrender.com)
+[Backend Labs on Render](https://backend-lab-2-h00x.onrender.com)
