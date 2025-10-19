@@ -48,4 +48,4 @@ docker-compose down
 
 ## Deployment
 
-[Backend Labs on Render](https://backend-labs-fnwj.onrender.com)
+[Backend Labs on Render](https://backend-lab-1-hhc4.onrender.com)
