@@ -25,16 +25,6 @@ async function main() {
     },
   });
 
-  const uah = await prisma.currency.upsert({
-    where: { code: 'UAH' },
-    update: {},
-    create: {
-      code: 'UAH',
-      name: 'Ukrainian Hryvnia',
-      symbol: '₴',
-    },
-  });
-
   const salary = await prisma.category.create({
     data: { name: 'Salary' },
   });
@@ -94,7 +84,7 @@ async function main() {
       {
         userId: john.id,
         categoryId: transport.id,
-        currencyId: uah.id,
+        currencyId: eur.id,
         amount: 45.2,
       },
       {
@@ -106,7 +96,7 @@ async function main() {
       {
         userId: john.id,
         categoryId: utilities.id,
-        currencyId: uah.id,
+        currencyId: eur.id,
         amount: 120.75,
       },
     ],
@@ -135,7 +125,7 @@ async function main() {
       {
         userId: jane.id,
         categoryId: shopping.id,
-        currencyId: uah.id,
+        currencyId: usd.id,
         amount: 250,
       },
     ],

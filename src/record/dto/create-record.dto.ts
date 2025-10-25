@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
 
 export class CreateRecordDto {
   @IsString()
@@ -12,4 +12,8 @@ export class CreateRecordDto {
   @IsNumber()
   @IsNotEmpty()
   amount: number;
+
+  @IsString()
+  @IsOptional()
+  currencyId: string;
 }

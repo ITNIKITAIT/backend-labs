@@ -10,6 +10,14 @@ export class CurrencyService {
   async createCurrency(
     createCurrencyDto: CreateCurrencyDto,
   ): Promise<Currency> {
+    const esictingCurrency = await this.prisma.currency.findUnique({
+      where: { code: createCurrencyDto.code },
+    });
+    if (esictingCurrency) {
+      throw new NotFoundException(
+        `Currency with code ${createCurrencyDto.code} already exists`,
+      );
+    }
     return await this.prisma.currency.create({
       data: createCurrencyDto,
     });

@@ -17,6 +17,7 @@ export class RecordService {
     userId,
     categoryId,
     amount,
+    currencyId,
   }: CreateRecordDto): Promise<Record> {
     const user = await this.userService.getUser(userId);
     const category = await this.categoryService.getCategory(categoryId);
@@ -26,7 +27,7 @@ export class RecordService {
         amount,
         userId: user.id,
         categoryId: category.id,
-        currencyId: user.defaultCurrencyId,
+        currencyId: currencyId || user.defaultCurrencyId,
       },
     });
   }

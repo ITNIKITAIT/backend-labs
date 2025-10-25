@@ -17,12 +17,16 @@ export class CurrencyController {
   }
 
   @Delete(':currency_id')
-  remove(@Param('currency_id') recordId: string) {
+  deleteCurrency(@Param('currency_id') recordId: string) {
     return this.currencyService.deleteCurrency(recordId);
   }
+}
 
+@Controller('currencies')
+export class CurrenciesController {
+  constructor(private readonly currencyService: CurrencyService) {}
   @Get()
-  getRecords() {
+  findAllCurrencies() {
     return this.currencyService.getCurrencies();
   }
 }
