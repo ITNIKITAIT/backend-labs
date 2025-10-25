@@ -8,7 +8,13 @@ import { PrismaModule } from './prisma/prisma.module';
 import { CurrencyModule } from './currency/currency.module';
 
 @Module({
-  imports: [UserModule, CategoryModule, RecordModule, PrismaModule, CurrencyModule],
+  imports: [
+    UserModule,
+    CategoryModule,
+    RecordModule,
+    PrismaModule,
+    CurrencyModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
