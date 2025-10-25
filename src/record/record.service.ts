@@ -1,78 +1,62 @@
-import {
-  Injectable,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { CategoryService } from '../category/category.service';
-import { Record } from './entities/record.entity';
-import { randomUUID } from 'node:crypto';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Record } from '@prisma/client';
 
 @Injectable()
 export class RecordService {
-  private records: Record[] = [];
-
   constructor(
+    private prisma: PrismaService,
     private readonly userService: UserService,
     private readonly categoryService: CategoryService,
   ) {}
 
-  public findRecordById(id: string): Record | undefined {
-    return this.records.find((record) => record.id === id);
+  async createRecord({
+    userId,
+    categoryId,
+    amount,
+  }: CreateRecordDto): Promise<Record> {
+    const user = await this.userService.getUser(userId);
+    const category = await this.categoryService.getCategory(categoryId);
+
+    return await this.prisma.record.create({
+      data: {
+        amount,
+        userId: user.id,
+        categoryId: category.id,
+        currencyId: user.defaultCurrencyId,
+      },
+    });
   }
 
-  createRecord({ userId, categoryId, amount }: CreateRecordDto): Record {
-    if (!this.userService.findUserById(userId)) {
-      throw new BadRequestException(`User with id ${userId} does not exist`);
-    }
+  async getRecord(id: string): Promise<Record> {
+    const record = await this.prisma.record.findUnique({
+      where: { id },
+    });
 
-    if (!this.categoryService.findCategoryById(categoryId)) {
-      throw new BadRequestException(
-        `Category with id ${categoryId} does not exist`,
-      );
-    }
-
-    const record: Record = {
-      id: randomUUID(),
-      userId,
-      categoryId,
-      createdAt: new Date(),
-      amount,
-    };
-
-    this.records.push(record);
-    return record;
-  }
-
-  getRecord(id: string): Record {
-    const record = this.findRecordById(id);
     if (!record) {
       throw new NotFoundException(`Record with id ${id} not found`);
     }
     return record;
   }
 
-  deleteRecord(id: string): { message: string } {
-    const record = this.findRecordById(id);
-    if (!record) {
-      throw new NotFoundException(`Record with id ${id} not found`);
-    }
-    this.records.splice(this.records.indexOf(record), 1);
+  async deleteRecord(id: string): Promise<{ message: string }> {
+    const category = await this.getRecord(id);
+
+    await this.prisma.record.delete({
+      where: { id: category.id },
+    });
     return { message: `Record ${id} deleted successfully` };
   }
 
-  getRecords(userId?: string, categoryId?: string): Record[] {
-    let records = [...this.records];
-
-    if (userId) {
-      records = records.filter((record) => record.userId === userId);
-    }
-
-    if (categoryId) {
-      records = records.filter((record) => record.categoryId === categoryId);
-    }
-
-    return records;
+  async getRecords(userId?: string, categoryId?: string): Promise<Record[]> {
+    return await this.prisma.record.findMany({
+      where: {
+        ...(userId && { userId }),
+        ...(categoryId && { categoryId }),
+      },
+    });
   }
 }
