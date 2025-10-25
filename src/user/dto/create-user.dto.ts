@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, Length } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsString, Length } from 'class-validator';
 
 export class CreateUserDto {
   @IsString()
@@ -7,4 +7,8 @@ export class CreateUserDto {
     message: 'User name must be between 2 and 20 characters',
   })
   name: string;
+
+  @IsString()
+  @IsOptional()
+  defaultCurrencyId: string;
 }

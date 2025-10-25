@@ -10,5 +10,6 @@ import { PrismaModule } from 'src/prisma/prisma.module';
   imports: [PrismaModule],
   controllers: [CurrencyController, CurrenciesController],
   providers: [CurrencyService],
+  exports: [CurrencyService],
 })
 export class CurrencyModule {}
