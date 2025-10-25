@@ -43,10 +43,10 @@ export class RecordService {
   }
 
   async deleteRecord(id: string): Promise<{ message: string }> {
-    const category = await this.getRecord(id);
+    const record = await this.getRecord(id);
 
     await this.prisma.record.delete({
-      where: { id: category.id },
+      where: { id: record.id },
     });
     return { message: `Record ${id} deleted successfully` };
   }
