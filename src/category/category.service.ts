@@ -27,10 +27,10 @@ export class CategoryService {
   }
 
   async deleteCategory(id: string): Promise<{ message: string }> {
-    await this.getCategory(id);
+    const category = await this.getCategory(id);
 
     await this.prisma.category.delete({
-      where: { id },
+      where: { id: category.id },
     });
     return { message: `Category ${id} deleted successfully` };
   }
