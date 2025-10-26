@@ -44,7 +44,7 @@ Includes **data validation**, **error handling**, and an **additional feature** 
 | POST   | `/record`            | Create a new record                                       |
 | GET    | `/record`            | Get records filtered by `user_id`, `category_id`, or both |
 
-### Category
+### Currency
 
 | Method | Endpoint                | Description           |
 | ------ | ----------------------- | --------------------- |
