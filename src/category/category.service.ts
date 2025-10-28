@@ -1,51 +1,37 @@
-import {
-  // ConflictException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
-import { randomUUID } from 'node:crypto';
-import { Category } from './entities/category.entity';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { Category } from '@prisma/client';
 
 @Injectable()
 export class CategoryService {
-  private readonly categories: Category[] = [];
+  constructor(private prisma: PrismaService) {}
 
-  public findCategoryById(id: string): Category | undefined {
-    return this.categories.find((c) => c.id === id);
+  async createCategory(
+    createCategoryDto: CreateCategoryDto,
+  ): Promise<Category> {
+    return await this.prisma.category.create({
+      data: createCategoryDto,
+    });
   }
 
-  createCategory(createCategoryDto: CreateCategoryDto): Category {
-    // const category = this.categories.find(
-    //   (c) => c.name === createCategoryDto.name,
-    // );
-    // if (category) {
-    //   throw new ConflictException(
-    //     `Category with name ${createCategoryDto.name} already exists`,
-    //   );
-    // }
-    const createdCategory = {
-      id: randomUUID(),
-      ...createCategoryDto,
-    };
-    this.categories.push(createdCategory);
-    return createdCategory;
-  }
+  async getCategory(id: string): Promise<Category> {
+    const category = await this.prisma.category.findUnique({
+      where: { id },
+    });
 
-  getCategory(id: string): Category {
-    const category = this.findCategoryById(id);
     if (!category) {
       throw new NotFoundException(`Category with id ${id} not found`);
     }
     return category;
   }
 
-  deleteCategory(id: string): { message: string } {
-    const category = this.findCategoryById(id);
-    if (!category) {
-      throw new NotFoundException(`Category with id ${id} not found`);
-    }
-    this.categories.splice(this.categories.indexOf(category), 1);
-    return { message: `Category with id ${id} deleted` };
+  async deleteCategory(id: string): Promise<{ message: string }> {
+    const category = await this.getCategory(id);
+
+    await this.prisma.category.delete({
+      where: { id: category.id },
+    });
+    return { message: `Category ${id} deleted successfully` };
   }
 }

@@ -1,6 +1,20 @@
 # Backend Labs — NestJS
 
-Develop and test a basic REST API for an expense tracking web application. In this lab, all data is stored **in memory** — no database is used.
+Develop and test a basic REST API for an expense tracking web application.  
+In this lab, data is stored in a **PostgreSQL database** using **ORM (Prisma)**.  
+Includes **data validation**, **error handling**, and an **additional feature** according to the lab variant.
+
+---
+
+## Lab 3 Variant
+
+**Group:** IM-31 → 31 mod 3 = 1 → **Variant: Currencies**
+
+### Additional Feature: Currencies
+
+- Each user has a **default currency** (can be updated).
+- Each expense record may specify a currency — if not provided, the user’s default currency is used.
+- A separate `Currency` entity has been added to manage available currencies.
 
 ---
 
@@ -29,6 +43,15 @@ Develop and test a basic REST API for an expense tracking web application. In th
 | DELETE | `/record/:record_id` | Delete a record                                           |
 | POST   | `/record`            | Create a new record                                       |
 | GET    | `/record`            | Get records filtered by `user_id`, `category_id`, or both |
+
+### Currency
+
+| Method | Endpoint                | Description           |
+| ------ | ----------------------- | --------------------- |
+| GET    | `/currency:currency_id` | Get all categories    |
+| GET    | `/currencies`           | Get all users         |
+| POST   | `/currencyd`            | Create a new category |
+| DELETE | `/currency`             | Delete a category     |
 
 ## Prerequisites
 
@@ -74,4 +97,4 @@ docker-compose down
 
 ## Deployment
 
-[Backend Labs on Render](https://backend-lab-2-h00x.onrender.com)
+[Backend Labs on Render](https://backend-lab-3-4srj.onrender.com)
