@@ -37,7 +37,7 @@ export class AuthService {
     });
 
     if (user) {
-      throw new Error('This email is already registered');
+      throw new UnauthorizedException('This email is already registered');
     }
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
