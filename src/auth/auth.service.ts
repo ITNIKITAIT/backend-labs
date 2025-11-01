@@ -23,12 +23,29 @@ export class AuthService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
+    const isPasswordValid = await bcrypt.compare(
+      loginDto.password,
+      user.password,
+    );
+
+    if (!isPasswordValid) {
+      throw new UnauthorizedException('Invalid credentials');
+    }
+
     const { accessToken, refreshToken } = await this.generateTokens(
       user.id,
       user.email,
     );
 
-    return { accessToken, refreshToken, user };
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        name: user.name,
+        email: user.email,
+        id: user.id,
+      },
+    };
   }
 
   async register(registerDto: RegisterDto) {
@@ -48,6 +65,7 @@ export class AuthService {
         email: registerDto.email,
         password: hashedPassword,
       },
+      omit: { password: true },
     });
 
     const { accessToken, refreshToken } = await this.generateTokens(
