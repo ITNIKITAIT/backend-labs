@@ -6,8 +6,11 @@ import { User } from '@prisma/client';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async getUser(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
+  async getUser(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      omit: { password: true },
+    });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -15,8 +18,8 @@ export class UserService {
     return user;
   }
 
-  async getUsers(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+  async getUsers(): Promise<Omit<User, 'password'>[]> {
+    return await this.prisma.user.findMany({ omit: { password: true } });
   }
 
   async deleteUser(id: string): Promise<{ message: string }> {

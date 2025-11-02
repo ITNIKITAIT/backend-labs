@@ -101,14 +101,14 @@ export class AuthService {
     };
   }
 
-  async updateRefreshToken(userId: string, refreshToken: string) {
+  async updateRefreshToken(refreshToken: string) {
     const payload = this.jwtService.verify<JwtPayloadDto>(refreshToken, {
       secret: jwtConstants.refresh_secret,
     });
     const user = await this.prisma.user.findUnique({
       where: { email: payload.email },
     });
-    if (!user || user.id !== userId) {
+    if (!user) {
       throw new Error('Invalid refresh token');
     }
     const { accessToken: newAccessToken, refreshToken: newRefreshToken } =
@@ -117,7 +117,6 @@ export class AuthService {
     return {
       accessToken: newAccessToken,
       refreshToken: newRefreshToken,
-      user,
     };
   }
 
@@ -127,14 +126,14 @@ export class AuthService {
         { sub: userId, email },
         {
           secret: jwtConstants.access_secret,
-          expiresIn: '30sec',
+          expiresIn: '15m',
         },
       ),
       this.jwtService.signAsync(
         { sub: userId, email },
         {
           secret: jwtConstants.refresh_secret,
-          expiresIn: '1m',
+          expiresIn: '7d',
         },
       ),
     ]);
