@@ -1,4 +1,8 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { LoginDto } from './dto/login.dto';
@@ -6,12 +10,14 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { jwtConstants } from './constants';
 import { JwtPayloadDto } from './dto/jwt.payload.dto';
+import { CurrencyService } from 'src/currency/currency.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private jwtService: JwtService,
     private prisma: PrismaService,
+    private currencyService: CurrencyService,
   ) {}
 
   async login(loginDto: LoginDto) {
@@ -59,11 +65,26 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(registerDto.password, 10);
 
+    let defaultCurrencyId: string | null = registerDto.defaultCurrencyId;
+    if (defaultCurrencyId) {
+      const currency =
+        await this.currencyService.getCurrency(defaultCurrencyId);
+      if (!currency) {
+        throw new NotFoundException(
+          `Currency with id ${defaultCurrencyId} not found`,
+        );
+      }
+    } else {
+      const currency = await this.currencyService.getDefaultCurrency();
+      defaultCurrencyId = currency ? currency.id : null;
+    }
+
     const newUser = await this.prisma.user.create({
       data: {
         name: registerDto.name,
         email: registerDto.email,
         password: hashedPassword,
+        defaultCurrencyId,
       },
       omit: { password: true },
     });

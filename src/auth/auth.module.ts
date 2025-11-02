@@ -6,11 +6,13 @@ import { AuthController } from './auth.controller';
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaModule } from 'src/prisma/prisma.module';
 import { jwtConstants } from './constants';
+import { CurrencyModule } from 'src/currency/currency.module';
 
 @Module({
   imports: [
     PassportModule,
     PrismaModule,
+    CurrencyModule,
     JwtModule.register({
       secret: jwtConstants.access_secret,
       signOptions: { expiresIn: '1h' },

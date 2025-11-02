@@ -1,31 +1,10 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
-import { CurrencyService } from 'src/currency/currency.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private currencyService: CurrencyService,
-  ) {}
-
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const defaultCurrencyId = createUserDto.defaultCurrencyId;
-    if (defaultCurrencyId) {
-      const currency =
-        await this.currencyService.getCurrency(defaultCurrencyId);
-      if (!currency) {
-        throw new NotFoundException(
-          `Currency with id ${defaultCurrencyId} not found`,
-        );
-      }
-    }
-    return await this.prisma.user.create({
-      data: createUserDto,
-    });
-  }
+  constructor(private prisma: PrismaService) {}
 
   async getUser(id: string): Promise<User> {
     const user = await this.prisma.user.findUnique({ where: { id } });
