@@ -24,6 +24,8 @@ model Currency {
 model User {
   id                String   @id @default(uuid())
   name              String
+  email             String   @unique
+  password          String
   defaultCurrencyId String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt

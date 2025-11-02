@@ -7,11 +7,14 @@ import {
   Body,
   Query,
   BadRequestException,
+  UseGuards,
 } from '@nestjs/common';
 import { RecordService } from './record.service';
 import { CreateRecordDto } from './dto/create-record.dto';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @Controller('record')
+@UseGuards(JwtAuthGuard)
 export class RecordController {
   constructor(private readonly recordService: RecordService) {}
 

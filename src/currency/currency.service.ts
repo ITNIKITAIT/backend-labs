@@ -48,4 +48,10 @@ export class CurrencyService {
       where: {},
     });
   }
+
+  async getDefaultCurrency(): Promise<Currency | null> {
+    return await this.prisma.currency.findFirst({
+      where: {},
+    });
+  }
 }

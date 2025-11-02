@@ -1,34 +1,16 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { User } from '@prisma/client';
-import { CurrencyService } from 'src/currency/currency.service';
 
 @Injectable()
 export class UserService {
-  constructor(
-    private prisma: PrismaService,
-    private currencyService: CurrencyService,
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    const defaultCurrencyId = createUserDto.defaultCurrencyId;
-    if (defaultCurrencyId) {
-      const currency =
-        await this.currencyService.getCurrency(defaultCurrencyId);
-      if (!currency) {
-        throw new NotFoundException(
-          `Currency with id ${defaultCurrencyId} not found`,
-        );
-      }
-    }
-    return await this.prisma.user.create({
-      data: createUserDto,
+  async getUser(id: string): Promise<Omit<User, 'password'>> {
+    const user = await this.prisma.user.findUnique({
+      where: { id },
+      omit: { password: true },
     });
-  }
-
-  async getUser(id: string): Promise<User> {
-    const user = await this.prisma.user.findUnique({ where: { id } });
 
     if (!user) {
       throw new NotFoundException(`User with id ${id} not found`);
@@ -36,8 +18,8 @@ export class UserService {
     return user;
   }
 
-  async getUsers(): Promise<User[]> {
-    return await this.prisma.user.findMany();
+  async getUsers(): Promise<Omit<User, 'password'>[]> {
+    return await this.prisma.user.findMany({ omit: { password: true } });
   }
 
   async deleteUser(id: string): Promise<{ message: string }> {

@@ -2,7 +2,17 @@
 
 Develop and test a basic REST API for an expense tracking web application.  
 In this lab, data is stored in a **PostgreSQL database** using **ORM (Prisma)**.  
-Includes **data validation**, **error handling**, and an **additional feature** according to the lab variant.
+Includes **JWT authentication**, **data validation**, **error handling**, and an **additional feature** according to the lab variant.
+
+---
+
+## Lab 4: Authentication
+
+- User registration and login endpoints
+- JWT access and refresh token authentication
+- Protected routes (all endpoints require authentication)
+- Token refresh mechanism
+- Password hashing with bcrypt
 
 ---
 
@@ -18,40 +28,55 @@ Includes **data validation**, **error handling**, and an **additional feature** 
 
 ---
 
-### User
+## API Endpoints
+
+### Authentication (Public)
+
+| Method | Endpoint               | Description                              |
+| ------ | ---------------------- | ---------------------------------------- |
+| POST   | `/auth/register`       | Register a new user                      |
+| POST   | `/auth/login`          | Login and receive access/refresh tokens  |
+| POST   | `/auth/update-refresh` | Refresh access token using refresh token |
+
+### User (Protected)
 
 | Method | Endpoint         | Description            |
 | ------ | ---------------- | ---------------------- |
+| GET    | `/users`         | Get all users          |
 | GET    | `/user/:user_id` | Get a specific user    |
 | DELETE | `/user/:user_id` | Delete a specific user |
-| POST   | `/user`          | Create a new user      |
-| GET    | `/users`         | Get all users          |
 
-### Category
+---
 
-| Method | Endpoint    | Description           |
-| ------ | ----------- | --------------------- |
-| GET    | `/category` | Get all categories    |
-| POST   | `/category` | Create a new category |
-| DELETE | `/category` | Delete a category     |
+### Category (Protected)
 
-### Record
+| Method | Endpoint                 | Description             |
+| ------ | ------------------------ | ----------------------- |
+| GET    | `/category/:category_id` | Get a specific category |
+| POST   | `/category`              | Create a new category   |
+| DELETE | `/category/:category_id` | Delete a category       |
+
+---
+
+### Record (Protected)
 
 | Method | Endpoint             | Description                                               |
 | ------ | -------------------- | --------------------------------------------------------- |
 | GET    | `/record/:record_id` | Get a specific record                                     |
-| DELETE | `/record/:record_id` | Delete a record                                           |
 | POST   | `/record`            | Create a new record                                       |
 | GET    | `/record`            | Get records filtered by `user_id`, `category_id`, or both |
+| DELETE | `/record/:record_id` | Delete a record                                           |
 
-### Currency
+### Currency (Protected)
 
-| Method | Endpoint                | Description           |
-| ------ | ----------------------- | --------------------- |
-| GET    | `/currency:currency_id` | Get all categories    |
-| GET    | `/currencies`           | Get all users         |
-| POST   | `/currencyd`            | Create a new category |
-| DELETE | `/currency`             | Delete a category     |
+| Method | Endpoint                 | Description             |
+| ------ | ------------------------ | ----------------------- |
+| GET    | `/currencies`            | Get all currencies      |
+| GET    | `/currency/:currency_id` | Get a specific currency |
+| POST   | `/currency`              | Create a new currency   |
+| DELETE | `/currency/:currency_id` | Delete a currency       |
+
+**Authentication Required:** Bearer Token in `Authorization` header
 
 ## Prerequisites
 
@@ -97,4 +122,4 @@ docker-compose down
 
 ## Deployment
 
-[Backend Labs on Render](https://backend-lab-3-4srj.onrender.com)
+[Backend Labs on Render](https://backend-lab-4-p4yx.onrender.com)
